@@ -10,10 +10,10 @@ class Config:
     DEBUG = False
     TESTING = False
     
-    # Database
+    # Database - SQLite
     SQLALCHEMY_DATABASE_URI = os.getenv(
         'DATABASE_URL',
-        'mysql+pymysql://root:password@localhost:3306/image_hospital'
+        'sqlite:///image_hospital.db'  # SQLite数据库文件
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
