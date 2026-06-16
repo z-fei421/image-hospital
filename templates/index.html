@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}首页 - AI 图像医院{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="row mb-5">
+    <div class="col-lg-12">
+        <div class="jumbotron" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 60px 20px; border-radius: 10px; text-align: center;">
+            <h1 class="display-4" style="font-weight: bold; margin-bottom: 20px;">🏥 AI 图像医院</h1>
+            <p class="lead">基于大模型的图像质量诊断与智能修复平台</p>
+            <p style="font-size: 24px; margin: 30px 0;">每一张受损图像，都值得一次重生</p>
+            <hr class="bg-white">
+            <a class="btn btn-light btn-lg" href="#upload-section" role="button">开始挂号</a>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="row mb-5">
+    <div class="col-lg-12">
+        <h2 class="text-center mb-5" style="color: #667eea; font-weight: bold;">产品特色</h2>
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 text-center" style="border: 2px solid #667eea;">
+                    <div class="card-body">
+                        <div style="font-size: 40px; margin-bottom: 15px;">📊</div>
+                        <h5 class="card-title">AI 体检</h5>
+                        <p class="card-text">自动分析图像质量，生成健康评分</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 text-center" style="border: 2px solid #667eea;">
+                    <div class="card-body">
+                        <div style="font-size: 40px; margin-bottom: 15px;">🔬</div>
+                        <h5 class="card-title">智能诊断</h5>
+                        <p class="card-text">大模型分析问题原因，提供诊断报告</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 text-center" style="border: 2px solid #667eea;">
+                    <div class="card-body">
+                        <div style="font-size: 40px; margin-bottom: 15px;">🛠️</div>
+                        <h5 class="card-title">智能修复</h5>
+                        <p class="card-text">多种修复算法，快速恢复图像质量</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 text-center" style="border: 2px solid #667eea;">
+                    <div class="card-body">
+                        <div style="font-size: 40px; margin-bottom: 15px;">📋</div>
+                        <h5 class="card-title">病历管理</h5>
+                        <p class="card-text">完整的诊疗记录和历史档案库</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Upload Section -->
+<div class="row mb-5" id="upload-section">
+    <div class="col-lg-8 offset-lg-2">
+        <div class="card" style="border: 2px solid #667eea; border-radius: 10px;">
+            <div class="card-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <h5 class="mb-0">📤 挂号中心 - 上传您的图像</h5>
+            </div>
+            <div class="card-body">
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="fileInput" class="form-label">选择图像文件</label>
+                        <input type="file" class="form-control" id="fileInput" name="file" accept="image/*" required>
+                        <small class="form-text text-muted">支持：JPG, PNG, GIF, BMP (最大 50MB)</small>
+                    </div>
+                    <div class="progress mb-3" style="display: none;" id="uploadProgress">
+                        <div class="progress-bar" role="progressbar" style="width: 0%;"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+                        上传并开始诊疗
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Section -->
+<div class="row mb-5">
+    <div class="col-lg-12">
+        <div class="alert alert-info" role="alert">
+            <h5>📈 今日服务统计</h5>
+            <p>已为 <strong id="totalImages">0</strong> 张图像进行诊疗 | 平均健康评分：<strong id="avgScore">-</strong></p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const uploadForm = document.getElementById('uploadForm');
+const uploadProgress = document.getElementById('uploadProgress');
+
+uploadForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+    
+    if (!file) {
+        alert('请选择一个文件');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    try {
+        uploadProgress.style.display = 'block';
+        
+        const response = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // Redirect to diagnosis page
+            alert(`上传成功！患者ID: ${data.patient_id}`);
+            // window.location.href = `/diagnosis/${data.image_id}`;
+        } else {
+            alert(`上传失败：${data.error}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('上传过程中出现错误');
+    } finally {
+        uploadProgress.style.display = 'none';
+    }
+});
+</script>
+{% endblock %}
