@@ -1,7 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app import db
-from models.image import ImageRecord
-from models.diagnosis import DiagnosisRecord
+from models import db, ImageRecord, DiagnosisRecord
 from services.iqa_service import IQAService
 from services.deepseek_service import DeepSeekService
 

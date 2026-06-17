@@ -1,6 +1,5 @@
-from app import db
+from models import db
 from datetime import datetime
-import uuid
 
 class ImageRecord(db.Model):
     """Image record model - stores basic image information"""

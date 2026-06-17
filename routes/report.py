@@ -1,8 +1,5 @@
 from flask import Blueprint, send_file, jsonify
-from app import db
-from models.image import ImageRecord
-from models.diagnosis import DiagnosisRecord
-from models.treatment import TreatmentRecord
+from models import ImageRecord, DiagnosisRecord, TreatmentRecord
 from services.pdf_service import PDFService
 import os
 

@@ -1,8 +1,5 @@
 from flask import Blueprint, jsonify
-from app import db
-from models.image import ImageRecord
-from models.diagnosis import DiagnosisRecord
-from models.treatment import TreatmentRecord
+from models import db, ImageRecord, DiagnosisRecord, TreatmentRecord
 
 history_bp = Blueprint('history', __name__, url_prefix='/api')
 

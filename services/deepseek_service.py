@@ -20,7 +20,7 @@ class DeepSeekService:
             Dictionary with diagnosis results
         """
         # For now, return mock data since API key is not set
-        if not self.api_key:
+        if not self.api_key or self.api_key == '':
             return self._get_mock_diagnosis(metrics_dict)
         
         try:

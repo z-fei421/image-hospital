@@ -1,8 +1,5 @@
 from flask import Blueprint, request, jsonify, current_app
-from app import db
-from models.image import ImageRecord
-from models.treatment import TreatmentRecord
-from models.diagnosis import DiagnosisRecord
+from models import db, ImageRecord, TreatmentRecord, DiagnosisRecord
 from services.replicate_service import ReplicateService
 from services.iqa_service import IQAService
 import time
@@ -24,7 +21,7 @@ def start_treatment(image_id):
             return jsonify({'success': False, 'error': 'Diagnosis not found, please check image first'}), 400
         
         # Get treatment methods from request or use default
-        treatment_methods = request.json.get('methods', 'super_resolution,denoise')
+        treatment_methods = request.json.get('methods', 'super_resolution,denoise') if request.json else 'super_resolution,denoise'
         
         # Create treatment record
         treatment = TreatmentRecord(

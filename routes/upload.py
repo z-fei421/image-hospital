@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify, current_app
 from werkzeug.utils import secure_filename
-from app import db
-from models.image import ImageRecord
+from models import db, ImageRecord
 from services.upload_service import UploadService
 import os
 from datetime import datetime
